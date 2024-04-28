@@ -15,15 +15,16 @@ class _WeatherscreenState extends State<Weatherscreen> {
   //to get weather from weather package.      API
   final WeatherFactory wf = WeatherFactory(weatherAPI);
   //to store info for the weather coming from weather API.
-  Weather? weather;
+  var weather;
   @override
   //this function send request to weather package to get info from
   //weather API and store in variable weather.
   void initState() {
     super.initState();
-    wf.currentWeatherByCityName("karachi").then((w) {
+    wf.currentWeatherByCityName("tokyo").then((w) {
       setState(() {
         weather = w;
+        weatherSearch = weather;
       });
     });
   }
@@ -51,6 +52,9 @@ class _WeatherscreenState extends State<Weatherscreen> {
                 ),
                 child: TextField(
                   controller: weatherSearch,
+                  onSubmitted: (value) {
+                    weather = weatherSearch;
+                  },
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search here...",
@@ -85,14 +89,11 @@ class _WeatherscreenState extends State<Weatherscreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          locationHeader(),
-          SizedBox(
-            height: MediaQuery.sizeOf(context).height * 0.08,
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: locationHeader(),
           ),
           weatherIcon(),
-          SizedBox(
-            height: MediaQuery.sizeOf(context).height * 0.05,
-          ),
           currentTemp(),
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.02,
@@ -107,8 +108,8 @@ class _WeatherscreenState extends State<Weatherscreen> {
   Widget locationHeader() {
     return Text(
       weather?.areaName ?? "",
-      style: TextStyle(
-        fontSize: 30,
+      style: const TextStyle(
+        fontSize: 35,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -124,11 +125,9 @@ class _WeatherscreenState extends State<Weatherscreen> {
           DateFormat("h:mm a").format(
             DateTime.now(),
           ),
-          style: TextStyle(fontSize: 40),
+          style: const TextStyle(fontSize: 35),
         ),
-        SizedBox(
-          height: 10,
-        ),
+
         //Day.
         Row(
           mainAxisSize: MainAxisSize.max,
@@ -139,14 +138,14 @@ class _WeatherscreenState extends State<Weatherscreen> {
               DateFormat("EEEE").format(
                 DateTime.now(),
               ),
-              style: TextStyle(fontSize: 25),
+              style: const TextStyle(fontSize: 25),
             ),
             //Date.
             Text(
               "  ${DateFormat("d.m.y").format(
                 DateTime.now(),
               )}",
-              style: TextStyle(fontSize: 25),
+              style: const TextStyle(fontSize: 25),
             ),
           ],
         )
@@ -162,7 +161,7 @@ class _WeatherscreenState extends State<Weatherscreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          height: MediaQuery.sizeOf(context).height * 0.20,
+          height: MediaQuery.sizeOf(context).height * 0.25,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: NetworkImage(
@@ -170,7 +169,10 @@ class _WeatherscreenState extends State<Weatherscreen> {
             ),
           ),
         ),
-        Text(weather?.weatherDescription ?? ""),
+        Text(
+          weather?.weatherDescription ?? "",
+          style: const TextStyle(fontSize: 20),
+        ),
       ],
     );
   }
@@ -179,7 +181,7 @@ class _WeatherscreenState extends State<Weatherscreen> {
   Widget currentTemp() {
     return Text(
       "${weather?.temperature?.celsius?.toStringAsFixed(0)}\u00B0C",
-      style: TextStyle(),
+      style: const TextStyle(fontSize: 50),
     );
   }
 }
