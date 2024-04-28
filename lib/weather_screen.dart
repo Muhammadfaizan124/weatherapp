@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:weather/weather.dart';
 import 'package:weatherapp/api.dart';
@@ -15,7 +16,7 @@ class _WeatherscreenState extends State<Weatherscreen> {
   //to get weather from weather package.      API
   final WeatherFactory wf = WeatherFactory(weatherAPI);
   //to store info for the weather coming from weather API.
-  var weather;
+  Weather? weather;
   @override
   //this function send request to weather package to get info from
   //weather API and store in variable weather.
@@ -24,7 +25,7 @@ class _WeatherscreenState extends State<Weatherscreen> {
     wf.currentWeatherByCityName("tokyo").then((w) {
       setState(() {
         weather = w;
-        weatherSearch = weather;
+        //weatherSearch = weather;
       });
     });
   }
@@ -52,9 +53,9 @@ class _WeatherscreenState extends State<Weatherscreen> {
                 ),
                 child: TextField(
                   controller: weatherSearch,
-                  onSubmitted: (value) {
-                    weather = weatherSearch;
-                  },
+                  // onSubmitted: (value) {
+                  //   weather = weatherSearch;
+                  // },
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search here...",
